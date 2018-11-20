@@ -192,7 +192,7 @@ class Vcf:
         barcodes = tool.diffSet(columns, useless_columns)
         for barcode in barcodes:
             _barcode = '-'.join(barcode.split('_')[1:4]).split('.')[0]
-            save_path = tool.pathJoin(self.sfs_save_path, _barcode) + '.sps'
+            save_path = tool.pathJoin(self.sps_save_path, _barcode) + '.sps'
 
             barcode = vcf.loc[:, barcode].tolist()
             sfs = self.create_sfs(barcode, ref, lat)
