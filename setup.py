@@ -15,7 +15,7 @@ __author__ = 'Asdil'
 from setuptools import setup
 
 setup(name='mofang23',
-      version='0.0.0.3',
+      version='0.0.0.5',
       description='Tool of Asdil',
       author='Asdil',
       author_email='jpl4job@126.com',
@@ -24,7 +24,7 @@ setup(name='mofang23',
       license="MIT",
       packages=['mofang23'],
       platforms=["all"],
-      url='https://github.com/Asdil/Asdil',
+      url='https://github.com/Asdil/mofang23',
       install_requires=["pandas",
                         "Asdil"],
       classifiers=[

@@ -145,6 +145,16 @@ class Vcf:
                 logger.info(f'{vcf_path} 文件不存在')
             return 0
 
+        if self.sfs_save_path is None:
+            print('sfs文件保存路径为空')
+            if self.log:
+                logger.info('sfs文件保存路径为空')
+                assert self.sfs_save_path is not None
+
+        print(f'{vcf_path} 开始读取')
+        if self.log:
+            logger.info(f'{vcf_path} 开始读取')
+
         vcf = self.read_vcf(vcf_path)
         vcf = pd.merge(self.panel, vcf, how='left', on=['#CHROM', 'POS'])
         vcf = vcf.fillna('-')
@@ -165,6 +175,9 @@ class Vcf:
             print(f'{_barcode} sfs已经保存!')
             if self.log:
                 logger.info(f'{_barcode} sfs已经保存!')
+        print(f'{vcf_path} sfs全部转换完毕')
+        if self.log:
+            logger.info(f'{vcf_path} sfs全部转换完毕')
 
     def vcf2sps(self, vcf_path):
         """
@@ -180,6 +193,16 @@ class Vcf:
             if self.log:
                 logger.info(f'{vcf_path} 文件不存在')
             return 0
+
+        if self.sps_save_path is None:
+            print('sps文件保存路径为空')
+            if self.log:
+                logger.info('sps文件保存路径为空')
+            assert self.sps_save_path is not None
+
+        print(f'{vcf_path} 开始读取')
+        if self.log:
+            logger.info(f'{vcf_path} 开始读取')
 
         vcf = self.read_vcf(vcf_path)
         vcf = pd.merge(self.panel, vcf, how='left', on=['#CHROM', 'POS'])
@@ -203,8 +226,9 @@ class Vcf:
             print(f'{_barcode} sps已经保存!')
             if self.log:
                 logger.info(f'{_barcode} sps已经保存!')
-
-
+        print(f'{vcf_path} sps全部转换完毕')
+        if self.log:
+            logger.info(f'{vcf_path} sps全部转换完毕')
 
     def sfs2sps(self, sfs_path):
         logger = None
@@ -228,3 +252,69 @@ class Vcf:
         print(f'{_barcode} sps已经保存!')
         if self.log:
             logger.info(f'{_barcode} sps已经保存!')
+
+    def vcf2sfs_sps(self, vcf_path):
+        """
+        :param vcf_path: vcf路径
+        :return:
+        """
+        logger = None
+        if self.log:
+            logger = log.init_log(self.log_path)
+
+        if not os.path.exists(vcf_path):
+            print(f'{vcf_path} 文件不存在')
+            if self.log:
+                logger.info(f'{vcf_path} 文件不存在')
+            return 0
+
+        if self.sfs_save_path is None:
+            print('sfs文件保存路径为空')
+            if self.log:
+                logger.info('sfs文件保存路径为空')
+                assert self.sfs_save_path is not None
+
+        if self.sps_save_path is None:
+            print('sps文件保存路径为空')
+            if self.log:
+                logger.info('sps文件保存路径为空')
+            assert self.sps_save_path is not None
+
+        print(f'{vcf_path} 开始读取')
+        if self.log:
+            logger.info(f'{vcf_path} 开始读取')
+
+        vcf = self.read_vcf(vcf_path)
+        vcf = pd.merge(self.panel, vcf, how='left', on=['#CHROM', 'POS'])
+        vcf = vcf.fillna('-')
+        columns = vcf.columns.tolist()
+        useless_columns = ['#CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT']
+
+        ref = vcf['REF'].tolist()
+        lat = vcf['ALT'].tolist()
+        barcodes = tool.diffSet(columns, useless_columns)
+        for barcode in barcodes:
+            _barcode = '-'.join(barcode.split('_')[1:4]).split('.')[0]
+
+            sfs_save_path = tool.pathJoin(self.sfs_save_path, _barcode) + '.sfs'
+            sps_save_path = tool.pathJoin(self.sps_save_path, _barcode) + '.sps'
+
+            barcode = vcf.loc[:, barcode].tolist()
+            sfs = self.create_sfs(barcode, ref, lat)
+            with open(sfs_save_path, 'w') as f:
+                f.write(sfs)
+            print(f'{_barcode} sfs已经保存!')
+            if self.log:
+                logger.info(f'{_barcode} sfs已经保存!')
+
+            sfs = sfs.split('\n')
+            sps = self.create_sps(sfs)
+            with open(sps_save_path, 'w') as f:
+                f.write(sps)
+            print(f'{_barcode} sps已经保存!')
+            if self.log:
+                logger.info(f'{_barcode} sps已经保存!')
+
+        print(f'{vcf_path} sfs和sps全部转换完毕')
+        if self.log:
+            logger.info(f'{vcf_path} sfs和sps全部转换完毕')
