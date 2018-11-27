@@ -26,7 +26,7 @@ class Vcf:
         :param skiprows:        vcf #CHROM 在第几行
         """
         assert os.path.exists(panel_path)
-        panel = pd.read_table(panel_path, header=None)
+        panel = pd.read_table(panel_path)
 
         self.panel_ref = panel.iloc[:, 2].tolist()
         self.panel_lat = panel.iloc[:, 3].tolist()
