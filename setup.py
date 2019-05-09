@@ -15,7 +15,7 @@ __author__ = 'Asdil'
 from setuptools import setup
 
 setup(name='mofang23',
-      version='0.0.0.6',
+      version='0.0.0.7',
       description='Tool of Asdil',
       author='Asdil',
       author_email='jpl4job@126.com',
@@ -26,7 +26,9 @@ setup(name='mofang23',
       platforms=["all"],
       url='https://github.com/Asdil/mofang23',
       install_requires=["pandas",
-                        "Asdil"],
+                        "Asdil",
+                        "numpy",
+                        "matplotlib"],
       classifiers=[
           "Environment :: Web Environment",
           "Intended Audience :: Developers",
