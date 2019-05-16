@@ -15,7 +15,7 @@ __author__ = 'Asdil'
 from setuptools import setup
 
 setup(name='mofang23',
-      version='0.0.0.7',
+      version='0.0.0.8',
       description='Tool of Asdil',
       author='Asdil',
       author_email='jpl4job@126.com',

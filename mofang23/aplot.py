@@ -94,7 +94,7 @@ def plotEllipse(cov, pos, nstd=2, ax=None, **kwargs):
 def colors(random=False):
     colors = ['red', 'blue', 'green', '#801dae',
               'orange', 'yellow', '#ff7500', '#c3272b',
-              '#70f3ff', 'black', 'b36d61', '4b55c4',
+              '#70f3ff', 'black', '#b36d61', '#4b55c4',
               '#955539', '#3eede7', '#00e079',
               '#c0ebd7', '#eacd76', '#fff143']
 
