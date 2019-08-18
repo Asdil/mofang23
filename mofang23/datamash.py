@@ -83,9 +83,9 @@ def split_chroms2(paths, out_path, core=8):
     :return:
     """
     data_list = []
+    cmds = []
     for path in paths:
         name = tool.splitPath(path)[1]
-        cmds = []
         suff = tool.splitPath(path)[-2]
         if suff == '.gz':
             chrom = name.split('.')[-2]
@@ -139,7 +139,7 @@ def get_cpra(paths, out_path, core=8):
 def trans(params):
     """
     :param params:  文件路径, 输出文件路径
-    :return:       
+    :return:
     """
     path, out_path = params
     name = tool.splitPath(path)[1]
@@ -169,7 +169,7 @@ def transpose(paths, out_path, core=8):
     :param paths:     matrix文件路径列表
     :param out_path:  输出文件夹
     :param core:      并行核数
-    :return: 
+    :return:
     """
     params = [[path, out_path] for path in paths]
     pool = Pool(core)
@@ -196,15 +196,22 @@ def makeaped(path, out_path, cores=8):
 
 def makeaped_splited(path, out_path, cores=8):
     chroms, paths = get_chroms2(path)
-    paths = split_chroms2(paths, out_path)
+    print('拆分文件...')
+    paths = split_chroms2(paths, out_path, cores)
+    print('拆分文件结束')
+    print('生成map文件...')
     get_cpra(paths, out_path, cores)
+    print('map文件生成完毕')
+    print('转置文件...')
     transpose(paths, out_path, cores)
-    
+    print('所有处理完毕')
+
+
 def hp():
     print('1.第一种针对于文件 名称固定 文件名.vcf.gz 或者 文件名.vcf')
     print("path = '/home/jiapeiling/tmp/aa.1.vcf.gz'\nout_path = '/home/jiapeiling/tmp'\nmakeaped(path, out_path)")
     print()
     print('2.第一种针对于已经分染色体的文件 文件夹下包含 文件名.1.vcf.gz 或者 文件名.1.vcf')
-    print("path = '/home/jiapeiling/tmp'\nout_path = '/home/jiapeiling/tmp'\nmakeaped(path, out_path)")
+    print("path = '/home/jiapeiling/tmp'\nout_path = '/home/jiapeiling/tmp'\nmakeaped_splited(path, out_path)")
     print()
     print('输出文件: 文件名.染色体.map   文件名.染色体.aped')
